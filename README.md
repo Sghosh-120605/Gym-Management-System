@@ -98,7 +98,7 @@ Gym-Management-System/
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/Gym-Management-System.git
+git clone https://github.com/Sghosh-120605/Gym-Management-System.git
 cd Gym-Management-System
 
 # 2. Create virtual environment

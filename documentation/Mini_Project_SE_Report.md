@@ -165,7 +165,7 @@ GYM MANAGEMENT SYSTEM ↔ [Read/Write] ↔ Database
 
 ## GitHub Repository
 
-- **Project Link:** https://github.com/your-username/Gym-Management-System
+- **Project Link:** https://github.com/Sghosh-120605/Gym-Management-System
 
 ---
 
