@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}{{ member.full_name }} — GYM MANAGER{% endblock %}
+{% block page_title %}Member Profile{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0"><i class="fas fa-user me-2"></i>{{ member.full_name }}</h4>
+    <div>
+        <a href="{{ url_for('member_edit', id=member.id) }}" class="btn btn-warning"><i class="fas fa-edit me-1"></i>Edit</a>
+        <a href="{{ url_for('members_list') }}" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i>Back</a>
+    </div>
+</div>
+
+<!-- Member Info -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header"><h6 class="mb-0">Personal Information</h6></div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-borderless">
+                    <tr><th width="40%">Full Name</th><td>{{ member.full_name }}</td></tr>
+                    <tr><th>Email</th><td>{{ member.email }}</td></tr>
+                    <tr><th>Phone</th><td>{{ member.phone }}</td></tr>
+                    <tr><th>Gender</th><td>{{ member.gender|capitalize if member.gender else '-' }}</td></tr>
+                    <tr><th>Date of Birth</th><td>{{ member.date_of_birth.strftime('%d %b %Y') if member.date_of_birth else '-' }}</td></tr>
+                    <tr><th>Address</th><td>{{ member.address or '-' }}</td></tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-borderless">
+                    <tr><th width="40%">Join Date</th><td>{{ member.join_date.strftime('%d %b %Y') if member.join_date else '-' }}</td></tr>
+                    <tr><th>Plan</th><td>{{ member.membership_plan.name if member.membership_plan else 'N/A' }}</td></tr>
+                    <tr><th>Status</th><td><span class="badge bg-{{ 'success' if member.status=='active' else ('danger' if member.status=='inactive' else 'warning') }} fs-6">{{ member.status|capitalize }}</span></td></tr>
+                    <tr><th>Emergency Contact</th><td>{{ member.emergency_contact or '-' }}</td></tr>
+                    <tr><th>Emergency Phone</th><td>{{ member.emergency_phone or '-' }}</td></tr>
+                    <tr><th>Member Since</th><td>{{ member.created_at.strftime('%d %b %Y') if member.created_at else '-' }}</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment History -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h6 class="mb-0"><i class="fas fa-money-bill-wave me-2"></i>Payment History</h6>
+        <span class="badge bg-primary">{{ payments|length }} records</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light"><tr><th>Date</th><th>Amount</th><th>Method</th><th>Status</th><th>Transaction ID</th></tr></thead>
+                <tbody>
+                {% for p in payments %}
+                <tr>
+                    <td>{{ p.payment_date.strftime('%d %b %Y') if p.payment_date else '-' }}</td>
+                    <td>₹{{ "%.2f"|format(p.amount) }}</td>
+                    <td><span class="badge bg-info">{{ p.payment_method|upper }}</span></td>
+                    <td><span class="badge bg-{{ 'success' if p.status=='completed' else ('warning' if p.status=='pending' else 'danger') }}">{{ p.status|capitalize }}</span></td>
+                    <td>{{ p.transaction_id or '-' }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="text-center text-muted py-3">No payment records</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Attendance History -->
+<div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h6 class="mb-0"><i class="fas fa-calendar-check me-2"></i>Attendance History</h6>
+        <span class="badge bg-primary">{{ attendances|length }} records</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light"><tr><th>Date</th><th>Check In</th><th>Check Out</th><th>Duration</th></tr></thead>
+                <tbody>
+                {% for a in attendances %}
+                <tr>
+                    <td>{{ a.check_in.strftime('%d %b %Y') }}</td>
+                    <td>{{ a.check_in.strftime('%I:%M %p') }}</td>
+                    <td>{{ a.check_out.strftime('%I:%M %p') if a.check_out else '<span class="badge bg-success">Active</span>'|safe }}</td>
+                    <td>{% if a.check_out %}{{ ((a.check_out - a.check_in).total_seconds() / 3600)|round(1) }} hrs{% else %}-{% endif %}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" class="text-center text-muted py-3">No attendance records</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

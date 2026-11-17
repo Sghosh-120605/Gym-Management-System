@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Trainers — GYM MANAGER{% endblock %}
+{% block page_title %}Trainers{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0"><i class="fas fa-user-tie me-2"></i>Trainers</h4>
+    <a href="{{ url_for('trainer_add') }}" class="btn btn-primary"><i class="fas fa-plus me-1"></i>Add Trainer</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover datatable mb-0">
+                <thead class="table-light">
+                    <tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Specialization</th><th>Experience</th><th>Salary</th><th>Status</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                {% for t in trainers %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ t.first_name }} {{ t.last_name }}</td>
+                    <td>{{ t.email }}</td>
+                    <td>{{ t.phone }}</td>
+                    <td>{{ t.specialization or '-' }}</td>
+                    <td>{{ t.experience_years or 0 }} yrs</td>
+                    <td>₹{{ "%.2f"|format(t.salary or 0) }}</td>
+                    <td><span class="badge bg-{{ 'success' if t.status=='active' else 'danger' }}">{{ t.status|capitalize }}</span></td>
+                    <td>
+                        <a href="{{ url_for('trainer_edit', id=t.id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
+                        <form method="POST" action="{{ url_for('trainer_delete', id=t.id) }}" class="d-inline" onsubmit="return confirm('Delete this trainer?');">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="9" class="text-center text-muted py-4">No trainers found.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

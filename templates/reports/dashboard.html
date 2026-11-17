@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Reports — GYM MANAGER{% endblock %}
+{% block page_title %}Reports{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Reports Dashboard</h4>
+</div>
+
+<!-- Date Range Filter -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small">Start Date</label>
+                <input type="date" name="start_date" class="form-control" value="{{ start_date|default('') }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small">End Date</label>
+                <input type="date" name="end_date" class="form-control" value="{{ end_date|default('') }}">
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+                <button class="btn btn-outline-primary"><i class="fas fa-filter me-1"></i>Filter</button>
+                <a href="{{ url_for('reports_dashboard') }}" class="btn btn-outline-secondary">Clear</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Summary Stats -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card border-start border-primary border-4 shadow-sm text-center p-3">
+            <i class="fas fa-users fa-2x text-primary mb-2"></i>
+            <h3 class="fw-bold">{{ total_members|default(0) }}</h3>
+            <small class="text-muted">Total Members</small>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card border-start border-success border-4 shadow-sm text-center p-3">
+            <i class="fas fa-user-check fa-2x text-success mb-2"></i>
+            <h3 class="fw-bold">{{ active_members|default(0) }}</h3>
+            <small class="text-muted">Active Members</small>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card border-start border-warning border-4 shadow-sm text-center p-3">
+            <i class="fas fa-indian-rupee-sign fa-2x text-warning mb-2"></i>
+            <h3 class="fw-bold">₹{{ "%.2f"|format(total_revenue|default(0)) }}</h3>
+            <small class="text-muted">Total Revenue</small>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card border-start border-info border-4 shadow-sm text-center p-3">
+            <i class="fas fa-user-tie fa-2x text-info mb-2"></i>
+            <h3 class="fw-bold">{{ total_trainers|default(0) }}</h3>
+            <small class="text-muted">Total Trainers</small>
+        </div>
+    </div>
+</div>
+
+<!-- Report Links -->
+<div class="row">
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm h-100 border-top border-success border-3">
+            <div class="card-body text-center">
+                <i class="fas fa-indian-rupee-sign fa-3x text-success mb-3"></i>
+                <h5>Revenue Report</h5>
+                <p class="text-muted">View detailed revenue breakdown by month, payment method, and date range.</p>
+                <a href="{{ url_for('report_revenue') }}" class="btn btn-success"><i class="fas fa-arrow-right me-1"></i>View Report</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm h-100 border-top border-primary border-3">
+            <div class="card-body text-center">
+                <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                <h5>Membership Report</h5>
+                <p class="text-muted">Analyze membership distribution by plan, status, and demographics.</p>
+                <a href="{{ url_for('report_membership') }}" class="btn btn-primary"><i class="fas fa-arrow-right me-1"></i>View Report</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm h-100 border-top border-warning border-3">
+            <div class="card-body text-center">
+                <i class="fas fa-calendar-check fa-3x text-warning mb-3"></i>
+                <h5>Attendance Report</h5>
+                <p class="text-muted">Track daily attendance patterns and most active members.</p>
+                <a href="{{ url_for('report_attendance') }}" class="btn btn-warning"><i class="fas fa-arrow-right me-1"></i>View Report</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
